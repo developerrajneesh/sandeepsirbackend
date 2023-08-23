@@ -83,10 +83,10 @@ app.get('/api/appointments', async (req, res) => {
 // treatment api 
 
 
-app.post('/api/treatment/:userId', async (req, res) => {
+app.put('/api/treatment/:userId', async (req, res) => {
   const userId = req.params.userId;
 const {treatment} = req.body
-  console.log(userId,treatment);
+ // console.log(userId,treatment);
   try {
     const updatedUser = await Appointment.findByIdAndUpdate(userId, 
         { treatment}
