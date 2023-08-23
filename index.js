@@ -15,17 +15,21 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
+
 // Define Schema and Model
 const appointmentSchema = new mongoose.Schema({
   name: String,
   phone: String,
   time: String,
+  treatment: String,
+  fee: String,
+  advance: String,
   selectedProblem: String,
   selectedGender: String,
   selectedDate: String
 });
-
 const Appointment = mongoose.model('Appointment', appointmentSchema);
+
 
 // API route to save an appointment
 app.post('/api/appointments', async (req, res) => {
@@ -35,6 +39,8 @@ app.post('/api/appointments', async (req, res) => {
       name,
       phone,
       selectedDate,
+      fee:"1500",
+      advance:"500",
       selectedProblem,
       selectedGender,
       time
@@ -74,8 +80,26 @@ app.get('/api/appointments', async (req, res) => {
     }
   });
   
+// treatment api 
 
 
+app.post('/api/treatment/:userId', async (req, res) => {
+  const userId = req.params.userId;
+const {treatment} = req.body
+  console.log(userId,treatment);
+  try {
+    const updatedUser = await Appointment.findByIdAndUpdate(userId, 
+        { treatment}
+      , { new: true });
+    
+ 
+
+    res.status(201).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
