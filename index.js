@@ -50,12 +50,32 @@ app.post('/api/appointments', async (req, res) => {
 app.get('/api/appointments', async (req, res) => {
     try {
       const appointments = await Appointment.find();
-      res.status(200).json(appointments);
+      const reversedAppointments = appointments.reverse();
+      res.status(200).json(reversedAppointments);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Server error' });
     }
   });
+
+  app.get('/api/appointments/:id', async (req, res) => {
+    const itemId = req.params.id;
+  
+    try {
+      const data = await Appointment.findById(itemId);
+  
+      if (!data) {
+        res.status(404).json({ message: 'Item not found' });
+      } else {
+        res.json(data).status(201);
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'An error occurred' });
+    }
+  });
+  
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
